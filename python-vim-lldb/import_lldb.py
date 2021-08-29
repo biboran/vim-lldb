@@ -41,7 +41,7 @@ def import_lldb():
             # lldb -P returned invalid path, probably too old
             pass
         else:
-            sys.path.append(lldb_minus_p_path)
+            sys.path.append(str(lldb_minus_p_path, encoding='utf8'))
             import lldb
             return True
     except CalledProcessError:

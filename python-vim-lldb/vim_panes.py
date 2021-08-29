@@ -368,9 +368,12 @@ class VimPane(object):
         """ replace buffer with msg"""
         self.prepare()
 
-        msg = str(msg.encode("utf-8", "replace")).split('\n')
+        msg_bytes = msg.encode("utf-8", "replace")
+        msg_str = str(msg_bytes, encoding='utf8')
+        split_msg = msg_str.split('\n')
+
         try:
-            self.buffer.append(msg)
+            self.buffer.append(split_msg)
             vim.command("execute \"normal ggdd\"")
         except vim.error:
             # cannot update window; happens when vim is exiting.
