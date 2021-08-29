@@ -151,14 +151,22 @@ class LLDBController(object):
         else:
             self.doLaunch('-s' not in args, "")
 
-    def doAttach(self, process_name):
+    def doAttach(self, args):
         """ Handle process attach.  """
         error = lldb.SBError()
+
+        process_name = None
+        arguments = args.split(' ')
+        process_name = arguments[0]
+
+        wait = False
+        if len(arguments) == 2:
+            wait = bool(int(arguments[1]))
 
         self.processListener = lldb.SBListener("process_event_listener")
         self.target = self.dbg.CreateTarget('')
         self.process = self.target.AttachToProcessWithName(
-            self.processListener, process_name, False, error)
+            self.processListener, process_name, wait, error)
         if not error.Success():
             sys.stderr.write("Error during attach: " + str(error))
             return
